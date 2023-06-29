@@ -1,37 +1,44 @@
-import { render } from "@testing-library/react"
-import userEvent from "@testing-library/user-event"
+import { render, screen } from '@testing-library/react';
+import Counter from './Counter';
+import userEvent from '@testing-library/user-event';
+import { act } from 'react-dom/test-utils';
+import { logRoles } from '@testing-library/react';
 
-describe('Counter', ()=>{
-    test('should render correctlty', ()=>{
-        render(<Counter />)
-        screen.getByRole('heading', {
-            level: 1,
-        })
-
+describe('Counter', () => {
+    test('should render correctly', () => {
+        render(<Counter/>);
+        const h1Elem = screen.getByRole('heading',{
+            level:1,
+        }); 
+        const increaseBtn = screen.getByRole('button',{
+            name: "Increase",
+        });
+        expect(h1Elem).toBeInTheDocument();
+        expect(increaseBtn).toBeInTheDocument();
+    });
+    test('should increase count with button click', async () => {
+        render(<Counter/>);
         const increaseBtn = screen.getByRole('button', {
-            name: 'Increase',
-        })
-
-        expect(h1Elem).toBeInTheDocument()
-        expect(increaseBtn).toBeInTheDocument()
-    })
-
-    test('should increase count when increase button is clicked', async()=>{
-        render(<Counter />)
-        const increaseBtn = screen.getByRole('button', {
-            name: 'Increase',
-        })
-        await act(()=> userEvent.click(increaseBtn))
-
-        userEvent.click(increaseBtn)
+            name: "Increase",
+        });
+        await act(() => userEvent.click(increaseBtn));
         const h1Elem = screen.getByRole('heading', {
             level: 1,
-
-        })
-        expect(h1Elem).toHaveTextContent(2)
+        });
+        expect(h1Elem).toHaveTextContent(1);
+    });
+    test('should set the initial value from input field', async () => {
+        const view = render(<Counter/>);
+        logRoles(view.container);
+        const inputElem = screen.getByRole('spinbutton');
+        await act(() => userEvent.type(inputElem, "15"));
+        const setBtn = screen.getByRole('button', {
+            name: "Set"
+        });
+        await act(() => userEvent.click(setBtn));
+        const h1Elem = screen.getByRole('heading',{
+            level: 1,
+        });
+        expect(h1Elem).toHaveTextContent(15);
     })
-
-    test('should set count when set button is clicked', async()=>{
-        render(<Counter />)
-    })
-})
+});
