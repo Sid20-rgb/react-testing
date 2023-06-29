@@ -40,5 +40,32 @@ describe('Counter', () => {
             level: 1,
         });
         expect(h1Elem).toHaveTextContent(15);
+
+        const increaseBtn = screen.getByRole('button', {
+            name: "Increase",
+        })
+        await act(() => userEvent.click(increaseBtn));
+
+        expect(h1Elem).toHaveTextContent(21)
+    })
+
+    test('should have proper order of focus', () => {
+        render(<Counter/>);
+        const increaseBtn = screen.getByRole('button', {
+            name: "Increase",
+        })
+        const inputElem = screen.getByRole('spinbutton');
+        const setBtn = screen.getByRole('button', {
+            name: "Set"
+        });
+
+        userEvent.tab()
+        expect(increaseBtn).toHaveFocus();
+        userEvent.tab()
+        expect(inputElem).toHaveFocus();
+        userEvent.tab()
+        expect(setBtn).toHaveFocus();
+        
+        
     })
 });
