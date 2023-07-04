@@ -28,26 +28,38 @@ describe('Counter', () => {
         expect(h1Elem).toHaveTextContent(1);
     });
     test('should set the initial value from input field', async () => {
-        const view = render(<Counter/>);
-        logRoles(view.container);
+        render(<Counter />);
         const inputElem = screen.getByRole('spinbutton');
-        await act(() => userEvent.type(inputElem, "15"));
+        await act(() => userEvent.type(inputElem, '15'));
         const setBtn = screen.getByRole('button', {
-            name: "Set"
+          name: 'Set',
         });
         await act(() => userEvent.click(setBtn));
-        const h1Elem = screen.getByRole('heading',{
-            level: 1,
-        });
-        expect(h1Elem).toHaveTextContent(15);
-
+      
         const increaseBtn = screen.getByRole('button', {
-            name: "Increase",
-        })
+          name: 'Increase',
+        });
+      
+        const h1Elem = screen.getByRole('heading', {
+          level: 1,
+        });
+      
+        // Verify initial value is set correctly
+        expect(h1Elem).toHaveTextContent('15');
+      
+        // Increase the count by clicking the button
         await act(() => userEvent.click(increaseBtn));
-
-        expect(h1Elem).toHaveTextContent(21)
-    })
+      
+        // Verify the count has been incremented to 16
+        expect(h1Elem).toHaveTextContent('16');
+      
+        // Increase the count again
+        await act(() => userEvent.click(increaseBtn));
+      
+        // Verify the count has been incremented to 17
+        expect(h1Elem).toHaveTextContent('17');
+      });
+      
 
     test('should have proper order of focus', () => {
         render(<Counter/>);
