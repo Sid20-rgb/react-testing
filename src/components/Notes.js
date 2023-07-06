@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-export default function Notes() {
+export default function Notes({handleDelete}) {
   const [notes, setNotes] = useState([]);
   const [error, setError] = useState(null);
 
@@ -19,7 +19,9 @@ export default function Notes() {
       ) : (
         <ul>
           {notes.map((note) => (
-            <li key={note.id}>{note.title}</li>
+            <li key={note.id}>{note.title}{''}
+            <button onClick={handleDelete}>Delete</button>
+            </li>
           ))}
         </ul>
       )}

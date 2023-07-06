@@ -1,7 +1,11 @@
 import logo from './logo.svg';
 import './App.css';
+import Notes from './components/Notes';
 
 function App() {
+  const handleDelete = () => {
+    alert('Delete button clicked')
+  }
   return (
     <div className="App">
       <header className="App-header">
@@ -19,6 +23,7 @@ function App() {
         </a>
       </header>
 
+      <Notes handleDelete = {handleDelete}/>
       
     </div>
   );
